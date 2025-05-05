@@ -18,8 +18,9 @@ export class Game extends Scene {
         this.attackSpeed = 500; // milliseconds
 
         this.playerMoveTarget = null;
-        this.isAttacking = false;
         this.altMove = false;
+        this.canAttack = true;
+        this.attackTime = 0;
 
         this.moveIndicator = this.add.circle(0, 0, 6, 0xffff00);
         this.moveIndicator.setVisible(false);
@@ -32,7 +33,7 @@ export class Game extends Scene {
             this.playerMoveTarget = { x: pointer.x, y: pointer.y };
             this.moveIndicator.setPosition(pointer.x, pointer.y);
             this.moveIndicator.setVisible(true);
-            this.stopAutoAttack();
+            this.canAttack = false;
         });
 
         this.input.keyboard.on('keydown-SPACE', () => {
@@ -42,7 +43,7 @@ export class Game extends Scene {
             this.playerMoveTarget = { x: pointer.x, y: pointer.y };
             this.moveIndicator.setPosition(pointer.x, pointer.y);
             this.moveIndicator.setVisible(true);
-            this.stopAutoAttack();
+            this.canAttack = false;
         });
 
         this.enemies = this.physics.add.group();
@@ -61,7 +62,15 @@ export class Game extends Scene {
             callback: () => this.enemyShootAtPlayer(enemy1),
         });
 
-        enemy1.body.setCollideWorldBounds(true);
+        const enemy2 = this.add.circle(800, 200, 20, 0xff0000);
+        this.enemies.add(enemy2);
+        enemy2.body.setCollideWorldBounds(true);
+
+        this.time.addEvent({
+            delay: this.enemyShootInterval,
+            loop: true,
+            callback: () => this.enemyShootAtPlayer(enemy2),
+        });
 
         this.enemyBullets = this.physics.add.group();
         this.playerBullets = this.physics.add.group();
@@ -70,8 +79,9 @@ export class Game extends Scene {
         this.physics.add.overlap(this.playerBullets, this.enemies, this.handleEnemyHit, null, this);
     }
 
-    // eslint-disable-next-line no-unused-vars
     update(time, delta) {
+        this.attackTime += delta;
+
         // Player Movement
         if (this.playerMoveTarget) {
             const player = this.player;
@@ -83,8 +93,8 @@ export class Game extends Scene {
             if (dist < this.playerMoveSpeed * (1 / 60)) {
                 body.setVelocity(0, 0);
                 this.moveIndicator.setVisible(false);
-                this.startAutoAttack();
                 this.playerMoveTarget = null;
+                this.canAttack = true;
             }
             else {
                 const angle = Math.atan2(dy, dx);
@@ -100,10 +110,15 @@ export class Game extends Scene {
                 if (distToEnemy <= this.playerAttackRange && this.altMove) {
                     body.setVelocity(0, 0);
                     this.moveIndicator.setVisible(false);
-                    this.startAutoAttack();
                     this.playerMoveTarget = null;
+                    this.canAttack = true;
                 }
             });
+        }
+
+        // Try to shoot while standing still
+        if (this.canAttack) {
+            this.tryShoot();
         }
 
         // Update attack range indicator
@@ -134,22 +149,12 @@ export class Game extends Scene {
             );
         });
     }
-
-    startAutoAttack() {
-        if (this.isAttacking) return;
-        this.isAttacking = true;
-        this.attackTimer = this.time.addEvent({
-            delay: this.attackSpeed,
-            loop: true,
-            callback: this.playerShoot,
-            callbackScope: this
-        });
-    }
-
-    stopAutoAttack() {
-        if (!this.isAttacking) return;
-        this.isAttacking = false;
-        if (this.attackTimer) this.attackTimer.remove(false);
+    
+    tryShoot() {
+        if (this.attackTime >= this.attackSpeed) {
+            this.attackTime = 0;
+            this.playerShoot();
+        }
     }
 
     playerShoot() {
