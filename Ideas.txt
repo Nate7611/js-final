@@ -1,0 +1,14 @@
+Stats:
+Attack speed (Scale better than damage as it takes more skill)
+Damage
+Movement speed
+Health
+Attack Range
+
+Player:
+Moves
+Attacks
+Can Shop
+
+Triangle:
+Projectile
