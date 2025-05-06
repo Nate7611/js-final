@@ -9,21 +9,19 @@ import { AUTO, Game } from 'phaser';
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config = {
     type: AUTO,
-    width: 1024,
-    height: 768,
+    width: 1920,
+    height: 1080,
     parent: 'game-container',
     backgroundColor: '#028af8',
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true,
+            debug: false,
             gravity: { y: 0 }
         }
     },
     scale: {
-        // eslint-disable-next-line no-undef
         mode: Phaser.Scale.FIT,
-        // eslint-disable-next-line no-undef
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     scene: [

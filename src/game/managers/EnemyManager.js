@@ -9,16 +9,20 @@ export class EnemyManager {
 
     init() {
         this.enemies = this.scene.physics.add.group();
-
-        this.enemySpeed = 10;
-        this.enemyShootInterval = 5000;
+        this.enemySpeed = 80;
+        this.enemyShootInterval = 800;
+        this.maxHealth = 100;
+        this.damage = 20;
     }
 
     createEnemies() {
         const enemy1 = this.scene.add.circle(400, 300, 20, 0xff0000);
         this.enemies.add(enemy1);
         enemy1.body.setCollideWorldBounds(true);
-
+        enemy1.health = this.maxHealth;
+       
+        this.createHealthBar(enemy1);
+       
         this.scene.time.addEvent({
             delay: this.enemyShootInterval,
             loop: true,
@@ -28,7 +32,10 @@ export class EnemyManager {
         const enemy2 = this.scene.add.circle(800, 200, 20, 0xff0000);
         this.enemies.add(enemy2);
         enemy2.body.setCollideWorldBounds(true);
-
+        enemy2.health = this.maxHealth;
+       
+        this.createHealthBar(enemy2);
+       
         this.scene.time.addEvent({
             delay: this.enemyShootInterval,
             loop: true,
@@ -36,23 +43,86 @@ export class EnemyManager {
         });
     }
 
+    createHealthBar(enemy) {
+        const barBg = this.scene.add.rectangle(
+            enemy.x,
+            enemy.y - 30,
+            50,
+            8,
+            0x808080
+        );
+       
+        const bar = this.scene.add.rectangle(
+            enemy.x,
+            enemy.y - 30,
+            50,
+            8,
+            0x00ff00
+        );
+        
+        bar.setOrigin(0, 0.5);
+        bar.x = enemy.x - 25;
+       
+        enemy.healthBarBg = barBg;
+        enemy.healthBar = bar;
+    }
+
     update(time, delta) {
-        // Move enemies towards player
         this.enemies.getChildren().forEach(enemy => {
             if (!enemy.active) return;
-
+           
             const dx = this.scene.playerManager.player.x - enemy.x;
             const dy = this.scene.playerManager.player.y - enemy.y;
             const angle = Math.atan2(dy, dx);
-
+           
             enemy.body.setVelocity(
                 Math.cos(angle) * this.enemySpeed,
                 Math.sin(angle) * this.enemySpeed
             );
+           
+            if (enemy.healthBarBg && enemy.healthBar) {
+                enemy.healthBarBg.setPosition(enemy.x, enemy.y - 30);
+                enemy.healthBar.setPosition(enemy.x - 25, enemy.y - 30);
+            }
         });
     }
 
-    damageEnemy(enemy) {
-        console.log("Hit enemy");
+    damageEnemy(enemy, damage = 20) {
+        enemy.health -= damage;
+       
+        if (enemy.healthBar) {
+            const healthPercentage = Math.max(0, enemy.health / this.maxHealth);
+            
+            enemy.healthBar.width = 50 * healthPercentage;
+           
+            if (healthPercentage < 0.3) {
+                enemy.healthBar.fillColor = 0xff0000;
+            } else if (healthPercentage < 0.6) {
+                enemy.healthBar.fillColor = 0xffff00;
+            }
+        }
+       
+        if (enemy.health <= 0) {
+            this.killEnemy(enemy);
+        }
+    }
+   
+    killEnemy(enemy) {
+        if (enemy.healthBarBg) enemy.healthBarBg.destroy();
+        if (enemy.healthBar) enemy.healthBar.destroy();
+       
+        const enemyX = enemy.x;
+        const enemyY = enemy.y;
+        
+        enemy.destroy();
+        
+        const explosion = this.scene.add.circle(enemyX, enemyY, 30, 0xffa500);
+        this.scene.tweens.add({
+            targets: explosion,
+            scale: 0,
+            alpha: 0,
+            duration: 300,
+            onComplete: () => explosion.destroy()
+        });
     }
 }

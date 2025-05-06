@@ -91,11 +91,11 @@ export class ProjectileManager {
     
     handlePlayerHit(player, bullet) {
         bullet.destroy();
-        this.scene.playerManager.takeDamage(10);
+        this.scene.playerManager.damagePlayer(this.scene.enemyManager.damage);
     }
     
     handleEnemyHit(bullet, enemy) {
         bullet.destroy();
-        this.scene.enemyManager.damageEnemy(enemy);
+        this.scene.enemyManager.damageEnemy(enemy, this.scene.playerManager.damage);
     }
 }

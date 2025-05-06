@@ -16,11 +16,12 @@ export class PlayerManager {
         this.attackRange = 200;
         this.health = 100;
         this.attackSpeed = 500;
-        this.attackTime = 0;
+        this.damage = 10;
         
         this.moveTarget = null;
         this.altMove = false;
         this.canAttack = true;
+        this.attackTime = 0;
         
         this.moveIndicator = this.scene.add.circle(0, 0, 6, 0xffff00);
         this.moveIndicator.setVisible(false);
@@ -102,7 +103,7 @@ export class PlayerManager {
         }
     }
     
-    takeDamage(amount) {
+    damagePlayer(amount) {
         this.health -= amount;
         console.log(`Player hit! Health: ${this.health}`);
         
