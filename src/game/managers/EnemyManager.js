@@ -4,7 +4,7 @@ export class EnemyManager {
     constructor(scene) {
         this.scene = scene;
         this.init();
-        this.createEnemies();
+        this.spawnEnemies();
     }
 
     init() {
@@ -15,31 +15,25 @@ export class EnemyManager {
         this.damage = 20;
     }
 
-    createEnemies() {
-        const enemy1 = this.scene.add.circle(400, 300, 20, 0xff0000);
-        this.enemies.add(enemy1);
-        enemy1.body.setCollideWorldBounds(true);
-        enemy1.health = this.maxHealth;
-       
-        this.createHealthBar(enemy1);
-       
-        this.scene.time.addEvent({
-            delay: this.enemyShootInterval,
-            loop: true,
-            callback: () => this.scene.projectileManager.enemyShootAtPlayer(enemy1),
-        });
+    spawnEnemies() {
+        this.createEnemy(400, 300);
+        this.createEnemy(800, 200);
+        this.createEnemy(200, 900);
+        this.createEnemy(900, 400);
+    }
 
-        const enemy2 = this.scene.add.circle(800, 200, 20, 0xff0000);
-        this.enemies.add(enemy2);
-        enemy2.body.setCollideWorldBounds(true);
-        enemy2.health = this.maxHealth;
+    createEnemy(x, y) {
+        const enemy = this.scene.add.circle(x, y, 20, 0xff0000);
+        this.enemies.add(enemy);
+        enemy.body.setCollideWorldBounds(true);
+        enemy.health = this.maxHealth;
        
-        this.createHealthBar(enemy2);
+        this.createHealthBar(enemy);
        
         this.scene.time.addEvent({
             delay: this.enemyShootInterval,
             loop: true,
-            callback: () => this.scene.projectileManager.enemyShootAtPlayer(enemy2),
+            callback: () => this.scene.projectileManager.enemyShootAtPlayer(enemy),
         });
     }
 
