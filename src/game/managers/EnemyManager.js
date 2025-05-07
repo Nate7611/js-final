@@ -23,7 +23,7 @@ export class EnemyManager {
     }
 
     createEnemy(x, y) {
-        const enemy = this.scene.add.circle(x, y, 20, 0xff0000);
+        const enemy = this.scene.add.polygon(x, y, [0, 0, 40, 0, 20, 40], 0xff0000);
         this.enemies.add(enemy);
         enemy.body.setCollideWorldBounds(true);
         enemy.health = this.maxHealth;

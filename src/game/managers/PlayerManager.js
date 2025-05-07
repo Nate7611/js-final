@@ -8,14 +8,16 @@ export class PlayerManager {
     }
     
     init() {
-        this.player = this.scene.add.circle(100, 100, 20, 0x0000ff);
+        const centerX = this.scene.cameras.main.centerX;
+        const centerY = this.scene.cameras.main.centerY;
+        this.player = this.scene.add.circle(centerX, centerY, 20, 0x0000ff);
         this.scene.physics.add.existing(this.player);
         this.player.body.setCollideWorldBounds(true);
         
         this.moveSpeed = 400;
         this.attackRange = 200;
         this.health = 100;
-        this.attackSpeed = 500;
+        this.attackSpeed = 50;
         this.damage = 10;
         
         this.moveTarget = null;
