@@ -13,14 +13,16 @@ export class PlayerManager {
         this.player = this.scene.add.circle(centerX, centerY, 20, 0x0000ff);
         this.scene.physics.add.existing(this.player);
         this.player.body.setCollideWorldBounds(true);
-        
+
         this.maxHealth = 100;
         this.moveSpeed = 400;
         this.attackRange = 200;
-        this.attackSpeed = 50;
+        this.attackSpeed = 200;
         this.damage = 10;
         
-        this.health = 100;
+        this.money = 0;
+
+        this.health = this.maxHealth;
         this.moveTarget = null;
         this.altMove = false;
         this.canAttack = true;

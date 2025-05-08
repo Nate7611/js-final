@@ -16,10 +16,11 @@ export class EnemyManager {
     }
 
     spawnEnemies() {
-        this.createEnemy(400, 300);
-        this.createEnemy(800, 200);
-        this.createEnemy(200, 900);
-        this.createEnemy(900, 400);
+        this.createEnemy(200, 200);
+        this.createEnemy(1720, 200);
+        this.createEnemy(200, 880);
+        this.createEnemy(1720, 880);
+        
     }
 
     createEnemy(x, y) {
