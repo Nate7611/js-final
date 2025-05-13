@@ -4,26 +4,23 @@ export class EnemyManager {
     constructor(scene) {
         this.scene = scene;
         this.init();
-        this.spawnEnemies();
     }
 
     init() {
         this.enemies = this.scene.physics.add.group();
+
+        this.baseEnemySpeed = 80;
+        this.baseEnemyShootInterval = 800;
+        this.baseMaxHealth = 100;
+        this.baseDamage = 20;
+
         this.enemySpeed = 80;
         this.enemyShootInterval = 800;
         this.maxHealth = 100;
         this.damage = 20;
     }
 
-    spawnEnemies() {
-        this.createEnemy(200, 200);
-        this.createEnemy(1720, 200);
-        this.createEnemy(200, 880);
-        this.createEnemy(1720, 880);
-        
-    }
-
-    createEnemy(x, y) {
+    spawnEnemy(x, y) {
         const enemy = this.scene.add.polygon(x, y, [0, 0, 40, 0, 20, 40], 0xff0000);
         this.enemies.add(enemy);
         enemy.body.setCollideWorldBounds(true);

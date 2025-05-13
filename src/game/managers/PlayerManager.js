@@ -6,7 +6,7 @@ export class PlayerManager {
         this.init();
         this.setupInputHandlers();
     }
-    
+
     init() {
         const centerX = this.scene.cameras.main.centerX;
         const centerY = this.scene.cameras.main.centerY;
@@ -15,11 +15,11 @@ export class PlayerManager {
         this.player.body.setCollideWorldBounds(true);
 
         this.maxHealth = 100;
-        this.moveSpeed = 400;
-        this.attackRange = 200;
-        this.attackSpeed = 200;
-        this.damage = 10;
-        
+        this.moveSpeed = 300;
+        this.attackRange = 180;
+        this.attackSpeed = 250;
+        this.damage = 12;
+
         this.money = 0;
 
         this.health = this.maxHealth;
@@ -55,7 +55,7 @@ export class PlayerManager {
         );
         this.healthBar.setOrigin(0, 0.5);
     }
-    
+
     setupInputHandlers() {
         this.scene.input.on('pointerdown', (pointer) => {
             this.altMove = false;
@@ -115,6 +115,7 @@ export class PlayerManager {
 
         // Update indicators
         this.rangeIndicator.setPosition(this.player.x, this.player.y);
+        this.rangeIndicator.setRadius(this.attackRange);
 
         // Update health bar position
         if (this.healthBar && this.healthBarBg) {
@@ -132,8 +133,17 @@ export class PlayerManager {
 
     damagePlayer(amount) {
         this.health -= amount;
-        console.log(`Player hit! Health: ${this.health}`);
 
+        this.updateHealthBar();
+
+        if (this.health <= 0) {
+            this.healthBar?.destroy();
+            this.healthBarBg?.destroy();
+            this.scene.scene.start('GameOver');
+        }
+    }
+
+    updateHealthBar() {
         // Update health bar
         if (this.healthBar) {
             const healthPercentage = Math.max(0, this.health / this.maxHealth);
@@ -146,12 +156,6 @@ export class PlayerManager {
             } else {
                 this.healthBar.fillColor = 0x00ff00;
             }
-        }
-
-        if (this.health <= 0) {
-            this.healthBar?.destroy();
-            this.healthBarBg?.destroy();
-            this.scene.scene.start('GameOver');
         }
     }
 }

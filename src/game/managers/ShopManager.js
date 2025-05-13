@@ -23,11 +23,11 @@ export class ShopManager {
 
         // Upgrade options
         const upgrades = [
-            { name: "Max Health", stat: "maxHealth", cost: 10, increment: 10 },
-            { name: "Move Speed", stat: "moveSpeed", cost: 15, increment: 20 },
-            { name: "Attack Range", stat: "attackRange", cost: 20, increment: 15 },
-            { name: "Attack Speed", stat: "attackSpeed", cost: 25, increment: 5 },
-            { name: "Damage", stat: "damage", cost: 30, increment: 5 }
+            { name: "Max Health", stat: "maxHealth", cost: 20, increment: 2 },
+            { name: "Move Speed", stat: "moveSpeed", cost: 20, increment: 5 },
+            { name: "Attack Range", stat: "attackRange", cost: 20, increment: 5 },
+            { name: "Attack Speed", stat: "attackSpeed", cost: 20, increment: -5 },
+            { name: "Damage", stat: "damage", cost: 20, increment: 1 }
         ];
 
         let yPos = this.scene.cameras.main.height / 2 - 95;
@@ -67,10 +67,6 @@ export class ShopManager {
                     this.scene.playerManager[upgrade.stat] += upgrade.increment;
                     text.setText(`${upgrade.name}: ${this.scene.playerManager[upgrade.stat]}`);
                     this.scene.moneyText.setText(`money: ${this.scene.playerManager.money}`);
-
-                    // Increase cost for next upgrade lvl
-                    upgrade.cost = Math.floor(upgrade.cost * 1.5);
-                    costText.setText(`Cost: ${upgrade.cost}`);
                 }
             });
 
@@ -111,7 +107,7 @@ export class ShopManager {
 
         this.continueButton.on('pointerdown', () => {
             this.hide();
-            this.scene.enemyManager.spawnEnemies();
+            this.scene.startRound(); 
             this.isOpen = false;
             this.scene.shopOpen = false;
         });
@@ -137,12 +133,12 @@ export class ShopManager {
         this.shopGroup.setVisible(true);
         this.isOpen = true;
 
-        // Update enemy stats
+        // Update enemy stats (Bad way of doing this but I just want it to work)
         this.enemyStatsText.setText(
-            `Speed: ${this.scene.enemyManager.enemySpeed}\n` +
-            `Shoot Interval: ${this.scene.enemyManager.enemyShootInterval}\n` +
-            `Max Health: ${this.scene.enemyManager.maxHealth}\n` +
-            `Damage: ${this.scene.enemyManager.damage}`
+            `Speed: ${this.scene.enemyManager.enemySpeed} + ${this.scene.enemyManager.enemySpeed - this.scene.enemyManager.baseEnemySpeed}\n` +
+            `Attack Speed: ${this.scene.enemyManager.enemyShootInterval} - ${Math.abs(this.scene.enemyManager.enemyShootInterval - this.scene.enemyManager.baseEnemyShootInterval)}\n` +
+            `Max Health: ${this.scene.enemyManager.maxHealth} + ${this.scene.enemyManager.maxHealth - this.scene.enemyManager.baseMaxHealth}\n` +
+            `Damage: ${this.scene.enemyManager.damage} + ${this.scene.enemyManager.damage - this.scene.enemyManager.baseDamage}`
         );
 
         // Update player stats
