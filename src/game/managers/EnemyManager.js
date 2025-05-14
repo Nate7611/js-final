@@ -9,15 +9,15 @@ export class EnemyManager {
     init() {
         this.enemies = this.scene.physics.add.group();
 
-        this.baseEnemySpeed = 80;
-        this.baseEnemyShootInterval = 800;
-        this.baseMaxHealth = 100;
-        this.baseDamage = 20;
-
         this.enemySpeed = 80;
         this.enemyShootInterval = 800;
         this.maxHealth = 100;
         this.damage = 20;
+        
+        this.baseEnemySpeed = this.enemySpeed;
+        this.baseEnemyShootInterval = this.enemyShootInterval;
+        this.baseMaxHealth = this.maxHealth;
+        this.baseDamage = this.damage;
     }
 
     spawnEnemy(x, y) {

@@ -135,10 +135,10 @@ export class ShopManager {
 
         // Update enemy stats (Bad way of doing this but I just want it to work)
         this.enemyStatsText.setText(
-            `Speed: ${this.scene.enemyManager.enemySpeed} + ${this.scene.enemyManager.enemySpeed - this.scene.enemyManager.baseEnemySpeed}\n` +
-            `Attack Speed: ${this.scene.enemyManager.enemyShootInterval} - ${Math.abs(this.scene.enemyManager.enemyShootInterval - this.scene.enemyManager.baseEnemyShootInterval)}\n` +
-            `Max Health: ${this.scene.enemyManager.maxHealth} + ${this.scene.enemyManager.maxHealth - this.scene.enemyManager.baseMaxHealth}\n` +
-            `Damage: ${this.scene.enemyManager.damage} + ${this.scene.enemyManager.damage - this.scene.enemyManager.baseDamage}`
+            `Speed: ${this.scene.enemyManager.baseEnemySpeed} + ${this.scene.enemyManager.enemySpeed - this.scene.enemyManager.baseEnemySpeed}\n` +
+            `Attack Speed: ${this.scene.enemyManager.baseEnemyShootInterval} - ${Math.abs(this.scene.enemyManager.enemyShootInterval - this.scene.enemyManager.baseEnemyShootInterval)}\n` +
+            `Max Health: ${this.scene.enemyManager.baseMaxHealth} + ${this.scene.enemyManager.maxHealth - this.scene.enemyManager.baseMaxHealth}\n` +
+            `Damage: ${this.scene.enemyManager.baseDamage} + ${this.scene.enemyManager.damage - this.scene.enemyManager.baseDamage}`
         );
 
         // Update player stats
