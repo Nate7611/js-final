@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
-import { PlayerManager } from '../managers/playerManager';
-import { EnemyManager } from '../managers/enemyManager';
-import { ProjectileManager } from '../managers/projectileManager';
-import { ShopManager } from '../managers/shopManager';
+import { PlayerManager } from '../managers/PlayerManager';
+import { EnemyManager } from '../managers/EnemyManager';
+import { ProjectileManager } from '../managers/ProjectileManager';
+import { ShopManager } from '../managers/ShopManager';
 
 export class Game extends Phaser.Scene {
     constructor() {
