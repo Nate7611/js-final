@@ -15,6 +15,7 @@ export class ProjectileManager {
     }
     
     update(time, delta) {
+        // Home all player bullets to target
         this.playerBullets.getChildren().forEach(bullet => {
             if (!bullet.target || !bullet.target.active) return;
 
@@ -31,6 +32,7 @@ export class ProjectileManager {
         let closestEnemy = null;
         let closestDistance = playerManager.attackRange;
 
+        // Find closest enemy
         this.scene.enemyManager.enemies.getChildren().forEach(enemy => {
             const dist = Phaser.Math.Distance.Between(
                 playerManager.player.x, playerManager.player.y,
@@ -43,6 +45,7 @@ export class ProjectileManager {
             }
         });
 
+        // Once we find closest enemy, create bullet
         if (closestEnemy) {
             const bullet = this.scene.add.circle(
                 playerManager.player.x, 
@@ -57,6 +60,7 @@ export class ProjectileManager {
             bullet.body.onWorldBounds = true;
             bullet.target = closestEnemy;
 
+            // Remove bullet if it collides with world bounds
             this.scene.physics.world.on('worldbounds', (body) => {
                 if (body.gameObject === bullet) {
                     bullet.destroy();
@@ -70,18 +74,22 @@ export class ProjectileManager {
         
         const playerManager = this.scene.playerManager;
 
+        // Create bullet
         const bullet = this.scene.add.circle(enemy.x, enemy.y, 5, 0xffaa00);
         this.scene.physics.add.existing(bullet);
         this.enemyBullets.add(bullet);
         bullet.body.setCollideWorldBounds(true);
         bullet.body.onWorldBounds = true;
 
+
+        // Shoot towards player
         const dx = playerManager.player.x - bullet.x;
         const dy = playerManager.player.y - bullet.y;
         const angle = Math.atan2(dy, dx);
         
         bullet.body.setVelocity(Math.cos(angle) * this.enemyBulletSpeed, Math.sin(angle) * this.enemyBulletSpeed);
 
+        // Remove bullet if it collides with world bounds
         this.scene.physics.world.on('worldbounds', (body) => {
             if (body.gameObject === bullet) {
                 bullet.destroy();
@@ -89,6 +97,7 @@ export class ProjectileManager {
         });
     }
     
+    // Deal damage when bullet hits
     handlePlayerHit(player, bullet) {
         bullet.destroy();
         this.scene.playerManager.damagePlayer(this.scene.enemyManager.damage);

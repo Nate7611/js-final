@@ -14,12 +14,14 @@ export class EnemyManager {
         this.maxHealth = 100;
         this.damage = 20;
         
+        // Used in shop text
         this.baseEnemySpeed = this.enemySpeed;
         this.baseEnemyShootInterval = this.enemyShootInterval;
         this.baseMaxHealth = this.maxHealth;
         this.baseDamage = this.damage;
     }
 
+    // Creates enemy at x and y pos
     spawnEnemy(x, y) {
         const enemy = this.scene.add.polygon(x, y, [0, 0, 40, 0, 20, 40], 0xff0000);
         this.enemies.add(enemy);
@@ -60,6 +62,7 @@ export class EnemyManager {
     }
 
     update(time, delta) {
+        // Move all enemies towards the player
         this.enemies.getChildren().forEach(enemy => {
             if (!enemy.active) return;
            
@@ -82,6 +85,7 @@ export class EnemyManager {
     damageEnemy(enemy, damage = 20) {
         enemy.health -= damage;
        
+        // Update healthbar
         if (enemy.healthBar) {
             const healthPercentage = Math.max(0, enemy.health / this.maxHealth);
             
@@ -94,12 +98,14 @@ export class EnemyManager {
             }
         }
        
+        // Kill enemy if they run out of health
         if (enemy.health <= 0) {
             this.killEnemy(enemy);
         }
     }
    
     killEnemy(enemy) {
+        // Remove healthbar
         if (enemy.healthBarBg) enemy.healthBarBg.destroy();
         if (enemy.healthBar) enemy.healthBar.destroy();
        
@@ -108,6 +114,7 @@ export class EnemyManager {
         
         enemy.destroy();
         
+        // Play death animation
         const explosion = this.scene.add.circle(enemyX, enemyY, 30, 0xffa500);
         this.scene.tweens.add({
             targets: explosion,
