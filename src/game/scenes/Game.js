@@ -11,6 +11,25 @@ export class Game extends Phaser.Scene {
 
     create() {
         this.cameras.main.setBackgroundColor(0x222222);
+        this.add.image(1920/2, 1080/2, 'gameBackground');
+
+        // text style to use throughout the game
+        this.textConfig = {
+            fontFamily: '"Russo One", "Orbitron", sans-serif',
+            fontSize: '24px',
+            color: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 3,
+            shadow: {
+                offsetX: 2,
+                offsetY: 2,
+                color: '#000000',
+                blur: 4,
+                stroke: true,
+                fill: true
+            }
+        };
+
         this.roundNumber = 1;
         this.enemiesRemaining = 0;
         this.enemiesPerRound = 3; // Starting number of enemies
@@ -43,19 +62,18 @@ export class Game extends Phaser.Scene {
         
         // Text to display round info and enemies remaining
         this.roundText = this.add.text(16, 16, '', {
-            font: '24px Arial',
-            fill: '#ffffff'
+            ...this.textConfig
         }).setScrollFactor(0);
         
         this.enemyCountText = this.add.text(16, 50, '', {
-            font: '24px Arial',
-            fill: '#ff0000'
+            ...this.textConfig,
+            color: '#ff6666'
         }).setScrollFactor(0);
         
         // Money display
         this.moneyText = this.add.text(16, 84, '', {
-            font: '24px Arial',
-            fill: '#ffff00'
+            ...this.textConfig,
+            color: '#ffdd44'
         }).setScrollFactor(0);
         
         this.shopManager = new ShopManager(this);
@@ -107,7 +125,12 @@ export class Game extends Phaser.Scene {
             this.cameras.main.centerX, 
             this.cameras.main.centerY,
             `Round ${this.roundNumber}`,
-            { font: '48px Arial', fill: '#ffffff' }
+            { 
+                ...this.textConfig,
+                fontSize: '64px',
+                color: '#ffffff',
+                align: 'center'
+            }
         ).setOrigin(0.5);
         
         // Fade out and remove the round announcement
@@ -212,7 +235,12 @@ export class Game extends Phaser.Scene {
             this.cameras.main.centerX, 
             this.cameras.main.centerY,
             `Round ${this.roundNumber - 1} Complete!`,
-            { font: '48px Arial', fill: '#00ff00' }
+            { 
+                ...this.textConfig,
+                fontSize: '64px',
+                color: '#44ff44',
+                align: 'center'
+            }
         ).setOrigin(0.5);
         
         // Fade out and remove the message
