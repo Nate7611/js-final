@@ -68,10 +68,46 @@ export class MainMenu extends Scene {
         });
 
         tutorialButton.background.on('pointerdown', () => {
-            const tutorialURL = 'https://www.youtube.com/watch?v=example';
-            window.open(tutorialURL, '_blank');
+            this.showTutorialBox();
         });
     }
+
+    showTutorialBox() {
+        // Create overlay
+        const overlay = this.add.rectangle(1920 / 2, 1080 / 2, 1920, 1080, 0x000000, 0.6);
+        overlay.setDepth(5);
+
+        const tutorialBox = this.add.rectangle(1920 / 2, 1080 / 2, 1000, 500, 0xffffff, 1)
+            .setStrokeStyle(4, 0x4488ff)
+            .setDepth(6);
+
+        const tutorialText = this.add.text(1920 / 2, 1080 / 2 - 200,
+            "Move with mouse clicking.\n\n" +
+            "Press spacebar while an enemy is in your attack range (Red circle) to stop moving and shoot them. Make sure to dodge enemy bullets! \n\n" +
+            "After each round you will earn money, with bonus money being given based on your health.\n\n" +
+            "You will then be able to upgrade your character in the shop, but enemies will also get stronger each round and there will be more enemies each round.\n\n",
+            {
+                ...this.textConfig,
+                fontSize: '28px',
+                color: '#ffffff',
+                wordWrap: { width: 900 }
+            }
+        ).setOrigin(0.5, 0).setDepth(6);
+
+        // Close button
+        const closeButton = this.createButton(1920 / 2, 1080 / 2 + 200, 200, 60, 0xaa0000, 'CLOSE');
+        closeButton.background.setDepth(6);
+        closeButton.text.setDepth(6);
+
+        closeButton.background.on('pointerdown', () => {
+            overlay.destroy();
+            tutorialBox.destroy();
+            tutorialText.destroy();
+            closeButton.background.destroy();
+            closeButton.text.destroy();
+        });
+    }
+
 
     // Function to create buttons
     createButton(x, y, width, height, color, text) {
