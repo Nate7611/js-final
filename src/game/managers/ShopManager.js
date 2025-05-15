@@ -29,8 +29,8 @@ export class ShopManager {
         const upgrades = [
             { name: "Move Speed", stat: "moveSpeed", cost: 15, increment: 5 },
             { name: "Max Health", stat: "maxHealth", cost: 20, increment: 2 },
-            { name: "Attack Range", stat: "attackRange", cost: 20, increment: 5 },
-            { name: "Attack Speed", stat: "attackSpeed", cost: 20, increment: -5 },
+            { name: "Attack Range", stat: "attackRange", cost: 20, increment: 4 },
+            { name: "Attack Speed", stat: "attackSpeed", cost: 25, increment: -3 },
             { name: "Damage", stat: "damage", cost: 30, increment: 1 }
         ];
 
@@ -67,7 +67,33 @@ export class ShopManager {
             });
 
             button.on('pointerdown', () => {
+                // Check if player has enough money
                 if (this.scene.playerManager.money >= upgrade.cost) {
+                    // Check for attack speed to prevent it going below 50
+                    if (upgrade.stat === "attackSpeed" && 
+                        this.scene.playerManager[upgrade.stat] + upgrade.increment < 50) {
+                        
+                        // Create a message about limit
+                        const limitMessage = this.scene.add.text(
+                            this.scene.cameras.main.width / 2, 
+                            this.scene.cameras.main.height / 2 + 150,
+                            "Attack Speed cannot go below 50!", 
+                            {
+                                ...this.textConfig,
+                                fontSize: '20px',
+                                color: '#ff6666'
+                            }
+                        ).setOrigin(0.5);
+                        
+                        // Remove message after delay
+                        this.scene.time.delayedCall(1500, () => {
+                            limitMessage.destroy();
+                        });
+                        
+                        return;
+                    }
+                    
+                    // Apply upgrades
                     this.scene.playerManager.money -= upgrade.cost;
                     this.scene.playerManager[upgrade.stat] += upgrade.increment;
                     text.setText(`${upgrade.name}: ${this.scene.playerManager[upgrade.stat]}`);
@@ -120,7 +146,7 @@ export class ShopManager {
 
         this.continueButton.on('pointerdown', () => {
             this.hide();
-            this.scene.startRound();
+            this.scene.startRound(); 
             this.isOpen = false;
             this.scene.shopOpen = false;
         });
@@ -146,7 +172,7 @@ export class ShopManager {
         this.shopGroup.setVisible(true);
         this.isOpen = true;
 
-        // Update enemy stats (Bad way of doing this but I just want it to work)
+        // Update enemy stats with better formatting
         this.enemyStatsText.setText(
             `Speed: ${this.scene.enemyManager.baseEnemySpeed} + ${this.scene.enemyManager.enemySpeed - this.scene.enemyManager.baseEnemySpeed}\n` +
             `Attack Speed: ${this.scene.enemyManager.baseEnemyShootInterval} - ${Math.abs(this.scene.enemyManager.enemyShootInterval - this.scene.enemyManager.baseEnemyShootInterval)}\n` +
@@ -154,7 +180,7 @@ export class ShopManager {
             `Damage: ${this.scene.enemyManager.baseDamage} + ${this.scene.enemyManager.damage - this.scene.enemyManager.baseDamage}`
         );
 
-        // Open animation
+        // Entrance animation
         this.scene.tweens.add({
             targets: this.shopBg,
             scaleX: { from: 0, to: 1 },
@@ -179,7 +205,7 @@ export class ShopManager {
                 this.shopGroup.setVisible(false);
             }
         });
-
+        
         this.isOpen = false;
     }
 }

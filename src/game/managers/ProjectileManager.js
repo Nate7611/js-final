@@ -10,7 +10,7 @@ export class ProjectileManager {
         this.enemyBullets = this.scene.physics.add.group();
         this.playerBullets = this.scene.physics.add.group();
         
-        this.enemyBulletSpeed = 320;
+        this.enemyBulletSpeed = 300;
         this.playerBulletSpeed = 500;
     }
     
