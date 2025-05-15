@@ -27,8 +27,8 @@ export class ShopManager {
 
         // Upgrade options
         const upgrades = [
-            { name: "Move Speed", stat: "moveSpeed", cost: 15, increment: 5 },
-            { name: "Max Health", stat: "maxHealth", cost: 20, increment: 2 },
+            { name: "Move Speed", stat: "moveSpeed", cost: 15, increment: 8 },
+            { name: "Max Health", stat: "maxHealth", cost: 20, increment: 3 },
             { name: "Attack Range", stat: "attackRange", cost: 20, increment: 4 },
             { name: "Attack Speed", stat: "attackSpeed", cost: 25, increment: -3 },
             { name: "Damage", stat: "damage", cost: 30, increment: 1 }

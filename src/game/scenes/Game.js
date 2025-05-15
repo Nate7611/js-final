@@ -213,15 +213,14 @@ export class Game extends Phaser.Scene {
         this.roundNumber++;
         this.enemiesPerRound += 1; // Add more enemies each round
         
-        // Add money when round is complete
-        this.playerManager.money += 100 + Math.floor((this.playerManager.health / this.playerManager.maxHealth) * 100);
+        // Add money when round is complete (100 + up to 50 based on health remaining)
+        this.playerManager.money += 100 + Math.floor((this.playerManager.health / this.playerManager.maxHealth) * 50);
         
         // Apply enemy upgrades
         const upgrades = [
-            { name: "Speed", apply: () => this.enemyManager.enemySpeed += 5 },
-            { name: "Attack Speed", apply: () => {if (this.enemyManager.enemyShootInterval - 30 >= 20) {this.enemyManager.enemyShootInterval -= 30}} },
-            { name: "Max Health", apply: () => this.enemyManager.maxHealth += 10 },
-            { name: "Damage", apply: () => this.enemyManager.damage += 5 }
+            { apply: () => {if (this.enemyManager.enemyShootInterval - 20 >= 20) {this.enemyManager.enemyShootInterval -= 20}} },
+            { apply: () => this.enemyManager.maxHealth += 5 },
+            { apply: () => this.enemyManager.damage += 3 }
         ];
         
         // Apply random stat upgrades equal to the number of completed rounds

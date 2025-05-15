@@ -17,7 +17,7 @@ export class PlayerManager {
         this.maxHealth = 100;
         this.moveSpeed = 300;
         this.attackRange = 180;
-        this.attackSpeed = 250;
+        this.attackSpeed = 300;
         this.damage = 12;
 
         this.money = 0;
@@ -139,7 +139,7 @@ export class PlayerManager {
         if (this.health <= 0) {
             this.healthBar?.destroy();
             this.healthBarBg?.destroy();
-            this.scene.scene.start('GameOver');
+            this.scene.scene.start('MainMenu');
         }
     }
 
