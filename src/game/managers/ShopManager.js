@@ -29,7 +29,7 @@ export class ShopManager {
         const upgrades = [
             { name: "Move Speed", stat: "moveSpeed", cost: 15, increment: 8 },
             { name: "Max Health", stat: "maxHealth", cost: 20, increment: 3 },
-            { name: "Attack Range", stat: "attackRange", cost: 20, increment: 4 },
+            { name: "Attack Range", stat: "attackRange", cost: 20, increment: 5 },
             { name: "Attack Speed", stat: "attackSpeed", cost: 25, increment: -3 },
             { name: "Damage", stat: "damage", cost: 30, increment: 1 }
         ];
@@ -163,6 +163,8 @@ export class ShopManager {
         this.shopGroup.add(this.enemyStatsText);
         this.shopGroup.add(this.continueButton);
         this.shopGroup.add(this.continueText);
+
+        this.shopGroup.setVisible(false);
 
         this.hide();
     }
