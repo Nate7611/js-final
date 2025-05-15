@@ -20,7 +20,9 @@ const config = {
         }
     },
     scale: {
+        // eslint-disable-next-line no-undef
         mode: Phaser.Scale.FIT,
+        // eslint-disable-next-line no-undef
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     scene: [
@@ -35,6 +37,6 @@ const StartGame = (parent) => {
 
     return new Game({ ...config, parent });
 
-}
+};
 
 export default StartGame;
